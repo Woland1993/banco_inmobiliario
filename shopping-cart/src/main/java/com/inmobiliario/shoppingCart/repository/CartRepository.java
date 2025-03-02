@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Repository
 public class CartRepository {
@@ -19,6 +20,10 @@ public class CartRepository {
 
     public Optional<Cart> findById(Long id) {
         return carts.stream().filter(cart -> cart.getId().equals(id)).findFirst();
+    }
+
+    public List<Cart> findByUserId(Long userId) {
+        return carts.stream().filter(cart -> cart.getUserId().equals(userId)).collect(Collectors.toList());
     }
 
     public Cart save(Cart cart) {

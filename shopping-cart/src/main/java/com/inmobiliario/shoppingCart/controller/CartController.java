@@ -27,6 +27,12 @@ public class CartController {
         return cartService.getAllCarts();
     }
 
+    @GetMapping("/user/{userId}")
+    @Operation(summary = "Get carts by user ID", description = "Retrieve all shopping carts for a specific user")
+    public List<Cart> getCartsByUserId(@PathVariable Long userId) {
+        return cartService.getCartsByUserId(userId);
+    }
+
     @GetMapping("/{id}")
     @Operation(summary = "Get a cart by ID", description = "Retrieve a shopping cart by its ID")
     public ResponseEntity<Cart> getCartById(@PathVariable Long id) {
@@ -36,9 +42,9 @@ public class CartController {
     }
 
     @PostMapping
-    @Operation(summary = "Create a new cart", description = "Creates an empty shopping cart")
-    public ResponseEntity<Cart> createCart() {
-        Cart newCart = cartService.createCart();
+    @Operation(summary = "Create a new cart", description = "Creates an empty shopping cart for a user")
+    public ResponseEntity<Cart> createCart(@RequestParam Long userId) {
+        Cart newCart = cartService.createCart(userId);
         return ResponseEntity.ok(newCart);
     }
 

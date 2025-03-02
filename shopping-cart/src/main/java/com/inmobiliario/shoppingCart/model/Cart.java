@@ -7,11 +7,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 public class Cart {
-    private Long id;              
+    private Long id;   
+    private Long userId;      
+           
     private List<Item> items = new ArrayList<>(); 
+
+
+    public Cart(Long id, Long userId) {
+        this.id = id;
+        this.userId = userId;
+        this.items = new ArrayList<>();
+    }
 
     public double getTotalPrice() {
         return items.stream().mapToDouble(item -> item.getPrice() * item.getQuantity()).sum();

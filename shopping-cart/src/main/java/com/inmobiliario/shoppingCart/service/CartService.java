@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-
 @Service
 public class CartService {
 
@@ -20,12 +19,17 @@ public class CartService {
         return cartRepository.findAll();
     }
 
+    public List<Cart> getCartsByUserId(Long userId) {
+        return cartRepository.findByUserId(userId);
+    }
+
     public Optional<Cart> getCartById(Long id) {
         return cartRepository.findById(id);
     }
 
-    public Cart createCart() {
-        return cartRepository.save(new Cart());
+    public Cart createCart(Long userId) {
+        Cart newCart = new Cart(null, userId);
+        return cartRepository.save(newCart);
     }
 
     public Optional<Cart> addItemToCart(Long cartId, Item item) {
