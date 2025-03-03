@@ -37,4 +37,12 @@ public class CartRepository {
     public boolean deleteById(Long id) {
         return carts.removeIf(cart -> cart.getId().equals(id));
     }
+
+    public Optional<Cart> removeItemFromCart(Long cartId, Long itemId) {
+        Optional<Cart> cart = findById(cartId);
+        cart.ifPresent(c -> c.getItems().removeIf(item -> item.getId().equals(itemId)));
+        return cart;
+    }
+
+    
 }

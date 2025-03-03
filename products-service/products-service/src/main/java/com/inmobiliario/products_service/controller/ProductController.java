@@ -1,10 +1,13 @@
 package com.inmobiliario.products_service.controller;
 
+import com.inmobiliario.products_service.dto.ApiResponse;
 import com.inmobiliario.products_service.dto.ProductDto;
 import com.inmobiliario.products_service.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,13 +23,15 @@ public class ProductController {
 
     @Operation(summary = "Get all products", description = "Returns a list of all products from FakeStore API")
     @GetMapping
-    public ResponseEntity<List<ProductDto>> getAllProducts() {
-        return ResponseEntity.ok(productService.getAllProducts());
+    public ResponseEntity<ApiResponse<List<ProductDto>>> getAllProducts() {
+        return new ApiResponse<>("Products retrieved successfully", true, productService.getAllProducts())
+                .createResponse(HttpStatus.OK);
     }
 
     @Operation(summary = "Get product by ID", description = "Returns a product by its ID")
     @GetMapping("/{id}")
-    public ResponseEntity<ProductDto> getProductById(@PathVariable Long id) {
-        return ResponseEntity.ok(productService.getProductById(id));
+    public ResponseEntity<ApiResponse<ProductDto>>  getProductById(@PathVariable Long id) {
+        return new ApiResponse<>("Product retrieved successfully", true, productService.getProductById(id))
+        .createResponse(HttpStatus.OK);
     }
 }
