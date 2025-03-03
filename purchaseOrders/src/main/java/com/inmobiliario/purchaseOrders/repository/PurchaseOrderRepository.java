@@ -26,7 +26,7 @@ public class PurchaseOrderRepository {
                 throw new GenerateServiceException("A purchase order with the same cartId already exists");
             }
             order.setStatus("PENDING");
-            order.setId(currentId++);
+            order.setPurchaseId(currentId++);
             order.setCreatedAt(LocalDateTime.now());
             order.setUpdatedAt(null);
             order.setPaymentId(null);
@@ -52,7 +52,7 @@ public class PurchaseOrderRepository {
     public Optional<PurchaseOrder> findById(Long id) {
         try {
             return orders.stream()
-                    .filter(order -> order.getId().equals(id))
+                    .filter(order -> order.getPurchaseId().equals(id))
                     .findFirst()
                     .or(() -> {
                         throw new NoDataFoundException("Purchase order with ID: " + id + " not found.");
@@ -81,7 +81,7 @@ public class PurchaseOrderRepository {
 
     public void delete(Long id) {
         try {
-            boolean removed = orders.removeIf(order -> order.getId().equals(id));
+            boolean removed = orders.removeIf(order -> order.getPurchaseId().equals(id));
             if (!removed) {
                 throw new NoDataFoundException("Purchase order with ID: " + id + " not found for deletion.");
             }

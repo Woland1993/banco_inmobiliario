@@ -29,7 +29,7 @@ public class PaymentRepository {
 
         try {
             return payments.stream()
-                    .filter(p -> p.getId().equals(id))
+                    .filter(p -> p.getPaymentId().equals(id))
                     .findFirst()
                     .or(() -> {
                         throw new NoDataFoundException("Payment with ID: " + id + " not found.");
@@ -44,8 +44,8 @@ public class PaymentRepository {
         try {
            
             // Check if a payment with the same ID already exists
-            if (payments.stream().anyMatch(p -> p.getId().equals(payment.getId()))) {
-                throw new ValidateServiceException("A payment with the same ID already exists: " + payment.getId());
+            if (payments.stream().anyMatch(p -> p.getPaymentId().equals(payment.getPaymentId()))) {
+                throw new ValidateServiceException("A payment with the same ID already exists: " + payment.getPaymentId());
             }
     
             payments.add(payment);
@@ -61,10 +61,10 @@ public class PaymentRepository {
 
         try {
            
-            if (findById(payment.getId()).isEmpty()) {
-                throw new NoDataFoundException("Payment with ID: " + payment.getId() + " not found for update.");
+            if (findById(payment.getPaymentId()).isEmpty()) {
+                throw new NoDataFoundException("Payment with ID: " + payment.getPaymentId() + " not found for update.");
             }
-            deleteById(payment.getId());
+            deleteById(payment.getPaymentId());
             save(payment);
         } catch (Exception e) {
             throw new GenerateServiceException("Error updating payment");
@@ -75,7 +75,7 @@ public class PaymentRepository {
         PaymentValidator.validatePaymentId(id);
 
         try {
-            boolean removed = payments.removeIf(p -> p.getId().equals(id));
+            boolean removed = payments.removeIf(p -> p.getPaymentId().equals(id));
             if (!removed) {
                 throw new NoDataFoundException("Payment with ID: " + id + " not found for deletion.");
             }

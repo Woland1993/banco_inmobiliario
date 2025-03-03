@@ -19,7 +19,7 @@ public class CartRepository {
     }
 
     public Optional<Cart> findById(Long id) {
-        return carts.stream().filter(cart -> cart.getId().equals(id)).findFirst();
+        return carts.stream().filter(cart -> cart.getCardtId().equals(id)).findFirst();
     }
 
     public List<Cart> findByUserId(Long userId) {
@@ -27,15 +27,15 @@ public class CartRepository {
     }
 
     public Cart save(Cart cart) {
-        if (cart.getId() == null) {
-            cart.setId(nextCartId++);
+        if (cart.getCardtId() == null) {
+            cart.setCardtId(nextCartId++);
         }
         carts.add(cart);
         return cart;
     }
 
     public boolean deleteById(Long id) {
-        return carts.removeIf(cart -> cart.getId().equals(id));
+        return carts.removeIf(cart -> cart.getCardtId().equals(id));
     }
 
     public Optional<Cart> removeItemFromCart(Long cartId, Long itemId) {

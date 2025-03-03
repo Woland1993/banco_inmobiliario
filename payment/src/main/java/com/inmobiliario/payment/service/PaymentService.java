@@ -51,13 +51,13 @@ public class PaymentService {
     }
 
     private void updateOrderWithPayment(Payment payment) {
-        OrderUpdateRequest orderUpdate = new OrderUpdateRequest(payment.getId(), "PAID");
+        OrderUpdateRequest orderUpdate = new OrderUpdateRequest(payment.getPaymentId(), "PAID");
 
         try {
             orderClient.updateOrder(payment.getOrderId(), orderUpdate);
             System.out.println("Order updated successfully: " + payment.getOrderId());
         } catch (Exception e) {
-            throw new GenerateServiceException("Error updating order for payment ID: " + payment.getId(), e);
+            throw new GenerateServiceException("Error updating order for payment ID: " + payment.getPaymentId(), e);
         }
     }
 }

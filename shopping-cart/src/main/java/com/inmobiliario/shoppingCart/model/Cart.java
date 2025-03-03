@@ -8,14 +8,14 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 public class Cart {
-    private Long id;   
+    private Long CardtId;   
     private Long userId;      
            
     private List<Item> items = new ArrayList<>(); 
 
 
     public Cart(Long id, Long userId) {
-        this.id = id;
+        this.CardtId = id;
         this.userId = userId;
         this.items = new ArrayList<>();
     }

@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PurchaseOrder {
-    private Long id;
+    private Long PurchaseId;
     private Long customerId;
     private Long cartId;
     private Long paymentId;
