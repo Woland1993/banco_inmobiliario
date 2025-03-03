@@ -2,11 +2,13 @@ package com.inmobiliario.payment.service;
 
 import com.inmobiliario.payment.model.*;
 import com.inmobiliario.payment.repository.PaymentRepository;
+import com.inmobiliario.payment.validator.PaymentValidator;
+
 import org.springframework.stereotype.Service;
 import com.inmobiliario.payment.client.OrderClient;
-import org.springframework.stereotype.Service;
 import com.inmobiliario.payment.dto.OrderUpdateRequest;
-
+import com.inmobiliario.payment.exceptions.GenerateServiceException;
+import com.inmobiliario.payment.exceptions.ValidateServiceException;
 
 import java.util.List;
 import java.util.Optional;
@@ -28,13 +30,16 @@ public class PaymentService {
     public Optional<Payment> getPaymentById(Long id) {
         return paymentRepository.findById(id);
     }
-
-    public void createPayment(Payment payment) {
-        // Guardar el pago en la lista (simulación de base de datos)
-        paymentRepository.save(payment);
-
-        // Llamar al microservicio de órdenes para actualizar el estado
-        updateOrderWithPayment(payment);
+   public void createPayment(Payment payment) {
+        PaymentValidator.validatePayment(payment);
+        try {
+            updateOrderWithPayment(payment);
+            paymentRepository.save(payment);
+        } catch (ValidateServiceException e) {
+            throw e; // Re-throw validation exception
+        } catch (Exception e) {
+            throw new GenerateServiceException("Error creating payment", e);
+        }
     }
 
     public void updatePayment(Payment payment) {
@@ -52,7 +57,7 @@ public class PaymentService {
             orderClient.updateOrder(payment.getOrderId(), orderUpdate);
             System.out.println("Order updated successfully: " + payment.getOrderId());
         } catch (Exception e) {
-            System.err.println("Error updating order: " + e.getMessage());
+            throw new GenerateServiceException("Error updating order for payment ID: " + payment.getId(), e);
         }
     }
 }

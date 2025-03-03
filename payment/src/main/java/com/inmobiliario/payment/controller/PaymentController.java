@@ -1,13 +1,17 @@
 package com.inmobiliario.payment.controller;
 
+import com.inmobiliario.payment.dto.ApiResponse;
 import com.inmobiliario.payment.service.PaymentService;
 import com.inmobiliario.payment.model.Payment;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+
+import java.util.Optional;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 @RequestMapping("/payments")
@@ -21,23 +25,30 @@ public class PaymentController {
 
     @Operation(summary = "Get all payments", description = "Retrieves all payments stored in the system.")
     @GetMapping
-    public List<Payment> getAllPayments() {
-        return paymentService.getAllPayments();
+    public ResponseEntity<?>  getAllPayments() {
+    return  new ApiResponse<>("successfully", true, paymentService.getAllPayments()).createResponse(HttpStatus.OK);
     }
-
+   
     @Operation(summary = "Get payment by ID", description = "Retrieves a payment by its unique ID.")
     @GetMapping("/{id}")
-    public ResponseEntity<Payment> getPaymentById(@PathVariable Long id) {
-        return paymentService.getPaymentById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<ApiResponse<Payment>> getPaymentById(@PathVariable Long id) {
+        Optional<Payment> paymentOptional = paymentService.getPaymentById(id);
+    
+        if (paymentOptional.isPresent()) {
+            return new ApiResponse<>("Payment retrieved successfully", true, paymentOptional.get())
+                    .createResponse(HttpStatus.OK);
+        } else {
+            return new ApiResponse<Payment>("Payment not found", false, null) // Especifica <Payment>
+                    .createResponse(HttpStatus.NOT_FOUND);
+        }
     }
 
     @Operation(summary = "Create a new payment", description = "Stores a new payment in the system.")
     @PostMapping
-    public ResponseEntity<String> createPayment(@RequestBody Payment payment) {
+    public ResponseEntity<ApiResponse<String>> createPayment(@RequestBody Payment payment) {
         paymentService.createPayment(payment);
-        return ResponseEntity.ok("Payment created and order updated successfully");
+        return new ApiResponse<>("Payment created and order updated successfully", true, "Payment successful")
+                .createResponse(HttpStatus.CREATED);
     }
 
   /*   @Operation(summary = "Update an existing payment", description = "Updates an existing payment by ID.")
