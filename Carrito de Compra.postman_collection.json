@@ -1,0 +1,1757 @@
+{
+	"info": {
+		"_postman_id": "388ffb48-f5c9-42dd-a3a0-e4d0076736e7",
+		"name": "Carrito de Compra",
+		"description": "# 🚀 Get started here\n\nThis template guides you through CRUD operations (GET, POST, PUT, DELETE), variables, and tests.\n\n## 🔖 **How to use this template**\n\n#### **Step 1: Send requests**\n\nRESTful APIs allow you to perform CRUD operations using the POST, GET, PUT, and DELETE HTTP methods.\n\nThis collection contains each of these [request](https://learning.postman.com/docs/sending-requests/requests/) types. Open each request and click \"Send\" to see what happens.\n\n#### **Step 2: View responses**\n\nObserve the response tab for status code (200 OK), response time, and size.\n\n#### **Step 3: Send new Body data**\n\nUpdate or add new data in \"Body\" in the POST request. Typically, Body data is also used in PUT request.\n\n```\n{\n    \"name\": \"Add your name in the body\"\n}\n\n ```\n\n#### **Step 4: Update the variable**\n\nVariables enable you to store and reuse values in Postman. We have created a [variable](https://learning.postman.com/docs/sending-requests/variables/) called `base_url` with the sample request [https://postman-api-learner.glitch.me](https://postman-api-learner.glitch.me). Replace it with your API endpoint to customize this collection.\n\n#### **Step 5: Add tests in the \"Scripts\" tab**\n\nAdding tests to your requests can help you confirm that your API is working as expected. You can write test scripts in JavaScript and view the output in the \"Test Results\" tab.\n\n<img src=\"https://content.pstmn.io/fa30ea0a-373d-4545-a668-e7b283cca343/aW1hZ2UucG5n\" alt=\"\" height=\"1530\" width=\"2162\">\n\n## 💪 Pro tips\n\n- Use folders to group related requests and organize the collection.\n    \n- Add more [scripts](https://learning.postman.com/docs/writing-scripts/intro-to-scripts/) to verify if the API works as expected and execute workflows.\n    \n\n## 💡Related templates\n\n[API testing basics](https://go.postman.co/redirect/workspace?type=personal&collectionTemplateId=e9a37a28-055b-49cd-8c7e-97494a21eb54&sourceTemplateId=ddb19591-3097-41cf-82af-c84273e56719)  \n[API documentation](https://go.postman.co/redirect/workspace?type=personal&collectionTemplateId=e9c28f47-1253-44af-a2f3-20dce4da1f18&sourceTemplateId=ddb19591-3097-41cf-82af-c84273e56719)  \n[Authorization methods](https://go.postman.co/redirect/workspace?type=personal&collectionTemplateId=31a9a6ed-4cdf-4ced-984c-d12c9aec1c27&sourceTemplateId=ddb19591-3097-41cf-82af-c84273e56719)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "8694000"
+	},
+	"item": [
+		{
+			"name": "Flujo Principal",
+			"item": [
+				{
+					"name": "1 ) Solicitar Productos",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8080/api/products"
+					},
+					"response": []
+				},
+				{
+					"name": "2)Crear un Carrito vacio ",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/carts?userId=1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"carts"
+							],
+							"query": [
+								{
+									"key": "userId",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "3) Agregar Objetos Al Carro",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": 7,\r\n  \"quantity\": 15\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/carts/1/items",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"carts",
+								"1",
+								"items"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "4) Ingresar Nueva Orden de Compra con Status Pendiente de Aprobacion",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"ordersId\": 1,\r\n  \"customerId\": 1,\r\n  \"cartId\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/api/orders"
+					},
+					"response": []
+				},
+				{
+					"name": "5) Guardar el ID de Pago Generado por el Payment Gateway Esterno y Actualiza el Estado del Orden de Compra Vinculada ",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"orderId\": 1,\r\n  \"method\": \"CREDIT_CARD\",\r\n  \"status\": \"SUCCESS\",\r\n  \"paymentId\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/payments"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "payments",
+			"item": [
+				{
+					"name": "{id}",
+					"item": [
+						{
+							"name": "Get payment by ID",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/payments/:id",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"payments",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "<long>",
+											"description": "(Required) "
+										}
+									]
+								},
+								"description": "Retrieves a payment by its unique ID."
+							},
+							"response": [
+								{
+									"name": "OK",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "*/*"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/payments/:id",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"payments",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "id"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "*/*"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"message\": \"<string>\",\n  \"success\": \"<boolean>\",\n  \"data\": {\n    \"paymentId\": \"<long>\",\n    \"orderId\": \"<long>\",\n    \"method\": \"BANK_TRANSFER\",\n    \"status\": \"SUCCESS\"\n  }\n}"
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "Get all payments",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"url": "{{baseUrl}}/payments",
+						"description": "Retrieves all payments stored in the system."
+					},
+					"response": [
+						{
+							"name": "OK",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"url": "{{baseUrl}}/payments"
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "text",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "*/*"
+								}
+							],
+							"cookie": [],
+							"body": "{}"
+						}
+					]
+				},
+				{
+					"name": "Create a new payment",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"paymentId\": \"<long>\",\n  \"orderId\": \"<long>\",\n  \"method\": \"PAYPAL\",\n  \"status\": \"PENDING\"\n}",
+							"options": {
+								"raw": {
+									"headerFamily": "json",
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseUrl}}/payments",
+						"description": "Stores a new payment in the system."
+					},
+					"response": [
+						{
+							"name": "OK",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"paymentId\": \"<long>\",\n  \"orderId\": \"<long>\",\n  \"method\": \"PAYPAL\",\n  \"status\": \"PENDING\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{baseUrl}}/payments"
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "text",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "*/*"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"message\": \"<string>\",\n  \"success\": \"<boolean>\",\n  \"data\": \"<string>\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "products",
+			"item": [
+				{
+					"name": "products",
+					"item": [
+						{
+							"name": "{id}",
+							"item": [
+								{
+									"name": "Get product by ID",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "*/*"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/api/products/:id",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"products",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "<long>",
+													"description": "(Required) "
+												}
+											]
+										},
+										"description": "Returns a product by its ID"
+									},
+									"response": [
+										{
+											"name": "OK",
+											"originalRequest": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "*/*"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/api/products/:id",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"products",
+														":id"
+													],
+													"variable": [
+														{
+															"key": "id"
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "text",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "*/*"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"message\": \"<string>\",\n  \"success\": \"<boolean>\",\n  \"data\": {\n    \"id\": \"<long>\",\n    \"title\": \"<string>\",\n    \"description\": \"<string>\",\n    \"price\": \"<double>\",\n    \"category\": \"<string>\",\n    \"image\": \"<string>\",\n    \"rating\": {\n      \"rate\": \"<double>\",\n      \"count\": \"<integer>\"\n    }\n  }\n}"
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "Get all products",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"url": "{{baseUrl}}/api/products",
+								"description": "Returns a list of all products from FakeStore API"
+							},
+							"response": [
+								{
+									"name": "OK",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "*/*"
+											}
+										],
+										"url": "{{baseUrl}}/api/products"
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "*/*"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"message\": \"<string>\",\n  \"success\": \"<boolean>\",\n  \"data\": [\n    {\n      \"id\": \"<long>\",\n      \"title\": \"<string>\",\n      \"description\": \"<string>\",\n      \"price\": \"<double>\",\n      \"category\": \"<string>\",\n      \"image\": \"<string>\",\n      \"rating\": {\n        \"rate\": \"<double>\",\n        \"count\": \"<integer>\"\n      }\n    },\n    {\n      \"id\": \"<long>\",\n      \"title\": \"<string>\",\n      \"description\": \"<string>\",\n      \"price\": \"<double>\",\n      \"category\": \"<string>\",\n      \"image\": \"<string>\",\n      \"rating\": {\n        \"rate\": \"<double>\",\n        \"count\": \"<integer>\"\n      }\n    }\n  ]\n}"
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "orders",
+			"item": [
+				{
+					"name": "orders",
+					"item": [
+						{
+							"name": "{id}",
+							"item": [
+								{
+									"name": "Retrieve a purchase order by ID",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "*/*"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/api/orders/:id",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"orders",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "<long>",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "OK",
+											"originalRequest": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "*/*"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/api/orders/:id",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"orders",
+														":id"
+													],
+													"variable": [
+														{
+															"key": "id"
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "text",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "*/*"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"message\": \"<string>\",\n  \"success\": \"<boolean>\",\n  \"data\": {\n    \"customerId\": \"<long>\",\n    \"cartId\": \"<long>\",\n    \"paymentId\": \"<long>\",\n    \"totalAmount\": \"<double>\",\n    \"status\": \"<string>\",\n    \"createdAt\": \"<dateTime>\",\n    \"updatedAt\": \"<dateTime>\",\n    \"purchaseId\": \"<long>\"\n  }\n}"
+										}
+									]
+								},
+								{
+									"name": "Update a purchase order",
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"key": "Accept",
+												"value": "*/*"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"customerId\": \"<long>\",\n  \"cartId\": \"<long>\",\n  \"paymentId\": \"<long>\",\n  \"totalAmount\": \"<double>\",\n  \"status\": \"<string>\",\n  \"createdAt\": \"<dateTime>\",\n  \"updatedAt\": \"<dateTime>\",\n  \"purchaseId\": \"<long>\"\n}",
+											"options": {
+												"raw": {
+													"headerFamily": "json",
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/api/orders/:id",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"orders",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "<long>",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "OK",
+											"originalRequest": {
+												"method": "PUT",
+												"header": [
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"key": "Accept",
+														"value": "*/*"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"customerId\": \"<long>\",\n  \"cartId\": \"<long>\",\n  \"paymentId\": \"<long>\",\n  \"totalAmount\": \"<double>\",\n  \"status\": \"<string>\",\n  \"createdAt\": \"<dateTime>\",\n  \"updatedAt\": \"<dateTime>\",\n  \"purchaseId\": \"<long>\"\n}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/api/orders/:id",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"orders",
+														":id"
+													],
+													"variable": [
+														{
+															"key": "id"
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "text",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "*/*"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"message\": \"<string>\",\n  \"success\": \"<boolean>\",\n  \"data\": {\n    \"customerId\": \"<long>\",\n    \"cartId\": \"<long>\",\n    \"paymentId\": \"<long>\",\n    \"totalAmount\": \"<double>\",\n    \"status\": \"<string>\",\n    \"createdAt\": \"<dateTime>\",\n    \"updatedAt\": \"<dateTime>\",\n    \"purchaseId\": \"<long>\"\n  }\n}"
+										}
+									]
+								},
+								{
+									"name": "Delete a purchase order",
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "*/*"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/api/orders/:id",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"orders",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "<long>",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "OK",
+											"originalRequest": {
+												"method": "DELETE",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "*/*"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/api/orders/:id",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"orders",
+														":id"
+													],
+													"variable": [
+														{
+															"key": "id"
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "text",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "*/*"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"message\": \"<string>\",\n  \"success\": \"<boolean>\",\n  \"data\": {}\n}"
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "status",
+							"item": [
+								{
+									"name": "{status}",
+									"item": [
+										{
+											"name": "Retrieve orders by status",
+											"request": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "*/*"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/api/orders/status/:status",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"orders",
+														"status",
+														":status"
+													],
+													"variable": [
+														{
+															"key": "status",
+															"value": "<string>",
+															"description": "(Required) "
+														}
+													]
+												}
+											},
+											"response": [
+												{
+													"name": "OK",
+													"originalRequest": {
+														"method": "GET",
+														"header": [
+															{
+																"key": "Accept",
+																"value": "*/*"
+															}
+														],
+														"url": {
+															"raw": "{{baseUrl}}/api/orders/status/:status",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"api",
+																"orders",
+																"status",
+																":status"
+															],
+															"variable": [
+																{
+																	"key": "status"
+																}
+															]
+														}
+													},
+													"status": "OK",
+													"code": 200,
+													"_postman_previewlanguage": "text",
+													"header": [
+														{
+															"key": "Content-Type",
+															"value": "*/*"
+														}
+													],
+													"cookie": [],
+													"body": "{\n  \"message\": \"<string>\",\n  \"success\": \"<boolean>\",\n  \"data\": [\n    {\n      \"customerId\": \"<long>\",\n      \"cartId\": \"<long>\",\n      \"paymentId\": \"<long>\",\n      \"totalAmount\": \"<double>\",\n      \"status\": \"<string>\",\n      \"createdAt\": \"<dateTime>\",\n      \"updatedAt\": \"<dateTime>\",\n      \"purchaseId\": \"<long>\"\n    },\n    {\n      \"customerId\": \"<long>\",\n      \"cartId\": \"<long>\",\n      \"paymentId\": \"<long>\",\n      \"totalAmount\": \"<double>\",\n      \"status\": \"<string>\",\n      \"createdAt\": \"<dateTime>\",\n      \"updatedAt\": \"<dateTime>\",\n      \"purchaseId\": \"<long>\"\n    }\n  ]\n}"
+												}
+											]
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "customer",
+							"item": [
+								{
+									"name": "{customerId}",
+									"item": [
+										{
+											"name": "Retrieve orders by customer ID",
+											"request": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "*/*"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/api/orders/customer/:customerId",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"orders",
+														"customer",
+														":customerId"
+													],
+													"variable": [
+														{
+															"key": "customerId",
+															"value": "<long>",
+															"description": "(Required) "
+														}
+													]
+												}
+											},
+											"response": [
+												{
+													"name": "OK",
+													"originalRequest": {
+														"method": "GET",
+														"header": [
+															{
+																"key": "Accept",
+																"value": "*/*"
+															}
+														],
+														"url": {
+															"raw": "{{baseUrl}}/api/orders/customer/:customerId",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"api",
+																"orders",
+																"customer",
+																":customerId"
+															],
+															"variable": [
+																{
+																	"key": "customerId"
+																}
+															]
+														}
+													},
+													"status": "OK",
+													"code": 200,
+													"_postman_previewlanguage": "text",
+													"header": [
+														{
+															"key": "Content-Type",
+															"value": "*/*"
+														}
+													],
+													"cookie": [],
+													"body": "{\n  \"message\": \"<string>\",\n  \"success\": \"<boolean>\",\n  \"data\": [\n    {\n      \"customerId\": \"<long>\",\n      \"cartId\": \"<long>\",\n      \"paymentId\": \"<long>\",\n      \"totalAmount\": \"<double>\",\n      \"status\": \"<string>\",\n      \"createdAt\": \"<dateTime>\",\n      \"updatedAt\": \"<dateTime>\",\n      \"purchaseId\": \"<long>\"\n    },\n    {\n      \"customerId\": \"<long>\",\n      \"cartId\": \"<long>\",\n      \"paymentId\": \"<long>\",\n      \"totalAmount\": \"<double>\",\n      \"status\": \"<string>\",\n      \"createdAt\": \"<dateTime>\",\n      \"updatedAt\": \"<dateTime>\",\n      \"purchaseId\": \"<long>\"\n    }\n  ]\n}"
+												}
+											]
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "cart",
+							"item": [
+								{
+									"name": "{cartId}",
+									"item": [
+										{
+											"name": "Retrieve orders by cart ID",
+											"request": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "*/*"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/api/orders/cart/:cartId",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"orders",
+														"cart",
+														":cartId"
+													],
+													"variable": [
+														{
+															"key": "cartId",
+															"value": "<long>",
+															"description": "(Required) "
+														}
+													]
+												}
+											},
+											"response": [
+												{
+													"name": "OK",
+													"originalRequest": {
+														"method": "GET",
+														"header": [
+															{
+																"key": "Accept",
+																"value": "*/*"
+															}
+														],
+														"url": {
+															"raw": "{{baseUrl}}/api/orders/cart/:cartId",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"api",
+																"orders",
+																"cart",
+																":cartId"
+															],
+															"variable": [
+																{
+																	"key": "cartId"
+																}
+															]
+														}
+													},
+													"status": "OK",
+													"code": 200,
+													"_postman_previewlanguage": "text",
+													"header": [
+														{
+															"key": "Content-Type",
+															"value": "*/*"
+														}
+													],
+													"cookie": [],
+													"body": "{\n  \"message\": \"<string>\",\n  \"success\": \"<boolean>\",\n  \"data\": [\n    {\n      \"customerId\": \"<long>\",\n      \"cartId\": \"<long>\",\n      \"paymentId\": \"<long>\",\n      \"totalAmount\": \"<double>\",\n      \"status\": \"<string>\",\n      \"createdAt\": \"<dateTime>\",\n      \"updatedAt\": \"<dateTime>\",\n      \"purchaseId\": \"<long>\"\n    },\n    {\n      \"customerId\": \"<long>\",\n      \"cartId\": \"<long>\",\n      \"paymentId\": \"<long>\",\n      \"totalAmount\": \"<double>\",\n      \"status\": \"<string>\",\n      \"createdAt\": \"<dateTime>\",\n      \"updatedAt\": \"<dateTime>\",\n      \"purchaseId\": \"<long>\"\n    }\n  ]\n}"
+												}
+											]
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "Retrieve all purchase orders",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"url": "{{baseUrl}}/api/orders"
+							},
+							"response": [
+								{
+									"name": "OK",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "*/*"
+											}
+										],
+										"url": "{{baseUrl}}/api/orders"
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "*/*"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"message\": \"<string>\",\n  \"success\": \"<boolean>\",\n  \"data\": [\n    {\n      \"customerId\": \"<long>\",\n      \"cartId\": \"<long>\",\n      \"paymentId\": \"<long>\",\n      \"totalAmount\": \"<double>\",\n      \"status\": \"<string>\",\n      \"createdAt\": \"<dateTime>\",\n      \"updatedAt\": \"<dateTime>\",\n      \"purchaseId\": \"<long>\"\n    },\n    {\n      \"customerId\": \"<long>\",\n      \"cartId\": \"<long>\",\n      \"paymentId\": \"<long>\",\n      \"totalAmount\": \"<double>\",\n      \"status\": \"<string>\",\n      \"createdAt\": \"<dateTime>\",\n      \"updatedAt\": \"<dateTime>\",\n      \"purchaseId\": \"<long>\"\n    }\n  ]\n}"
+								}
+							]
+						},
+						{
+							"name": "Create a new purchase order",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"customerId\": \"<long>\",\n  \"cartId\": \"<long>\",\n  \"paymentId\": \"<long>\",\n  \"totalAmount\": \"<double>\",\n  \"status\": \"<string>\",\n  \"createdAt\": \"<dateTime>\",\n  \"updatedAt\": \"<dateTime>\",\n  \"purchaseId\": \"<long>\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{baseUrl}}/api/orders"
+							},
+							"response": [
+								{
+									"name": "OK",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"key": "Accept",
+												"value": "*/*"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"customerId\": \"<long>\",\n  \"cartId\": \"<long>\",\n  \"paymentId\": \"<long>\",\n  \"totalAmount\": \"<double>\",\n  \"status\": \"<string>\",\n  \"createdAt\": \"<dateTime>\",\n  \"updatedAt\": \"<dateTime>\",\n  \"purchaseId\": \"<long>\"\n}",
+											"options": {
+												"raw": {
+													"headerFamily": "json",
+													"language": "json"
+												}
+											}
+										},
+										"url": "{{baseUrl}}/api/orders"
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "*/*"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"message\": \"<string>\",\n  \"success\": \"<boolean>\",\n  \"data\": {\n    \"customerId\": \"<long>\",\n    \"cartId\": \"<long>\",\n    \"paymentId\": \"<long>\",\n    \"totalAmount\": \"<double>\",\n    \"status\": \"<string>\",\n    \"createdAt\": \"<dateTime>\",\n    \"updatedAt\": \"<dateTime>\",\n    \"purchaseId\": \"<long>\"\n  }\n}"
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "carts",
+			"item": [
+				{
+					"name": "carts",
+					"item": [
+						{
+							"name": "{id}",
+							"item": [
+								{
+									"name": "items",
+									"item": [
+										{
+											"name": "Add an item to a cart",
+											"request": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"key": "Accept",
+														"value": "*/*"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"id\": \"<long>\",\n  \"name\": \"<string>\",\n  \"price\": \"<double>\",\n  \"quantity\": \"<integer>\"\n}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/api/carts/:id/items",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"carts",
+														":id",
+														"items"
+													],
+													"variable": [
+														{
+															"key": "id",
+															"value": "<long>",
+															"description": "(Required) "
+														}
+													]
+												},
+												"description": "Adds a product to an existing shopping cart"
+											},
+											"response": [
+												{
+													"name": "OK",
+													"originalRequest": {
+														"method": "POST",
+														"header": [
+															{
+																"key": "Content-Type",
+																"value": "application/json"
+															},
+															{
+																"key": "Accept",
+																"value": "*/*"
+															}
+														],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n  \"id\": \"<long>\",\n  \"name\": \"<string>\",\n  \"price\": \"<double>\",\n  \"quantity\": \"<integer>\"\n}",
+															"options": {
+																"raw": {
+																	"headerFamily": "json",
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{baseUrl}}/api/carts/:id/items",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"api",
+																"carts",
+																":id",
+																"items"
+															],
+															"variable": [
+																{
+																	"key": "id"
+																}
+															]
+														}
+													},
+													"status": "OK",
+													"code": 200,
+													"_postman_previewlanguage": "text",
+													"header": [
+														{
+															"key": "Content-Type",
+															"value": "*/*"
+														}
+													],
+													"cookie": [],
+													"body": "{\n  \"message\": \"<string>\",\n  \"success\": \"<boolean>\",\n  \"data\": {\n    \"userId\": \"<long>\",\n    \"items\": [\n      {\n        \"id\": \"<long>\",\n        \"name\": \"<string>\",\n        \"price\": \"<double>\",\n        \"quantity\": \"<integer>\"\n      },\n      {\n        \"id\": \"<long>\",\n        \"name\": \"<string>\",\n        \"price\": \"<double>\",\n        \"quantity\": \"<integer>\"\n      }\n    ],\n    \"cardtId\": \"<long>\",\n    \"totalPrice\": \"<double>\"\n  }\n}"
+												}
+											]
+										}
+									]
+								},
+								{
+									"name": "Get a cart by ID",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "*/*"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/api/carts/:id",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"carts",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "<long>",
+													"description": "(Required) "
+												}
+											]
+										},
+										"description": "Retrieve a shopping cart by its ID"
+									},
+									"response": [
+										{
+											"name": "OK",
+											"originalRequest": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "*/*"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/api/carts/:id",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"carts",
+														":id"
+													],
+													"variable": [
+														{
+															"key": "id"
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "text",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "*/*"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"message\": \"<string>\",\n  \"success\": \"<boolean>\",\n  \"data\": {\n    \"userId\": \"<long>\",\n    \"items\": [\n      {\n        \"id\": \"<long>\",\n        \"name\": \"<string>\",\n        \"price\": \"<double>\",\n        \"quantity\": \"<integer>\"\n      },\n      {\n        \"id\": \"<long>\",\n        \"name\": \"<string>\",\n        \"price\": \"<double>\",\n        \"quantity\": \"<integer>\"\n      }\n    ],\n    \"cardtId\": \"<long>\",\n    \"totalPrice\": \"<double>\"\n  }\n}"
+										}
+									]
+								},
+								{
+									"name": "Update cart items",
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"key": "Accept",
+												"value": "*/*"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "[\n  {\n    \"id\": \"<long>\",\n    \"name\": \"<string>\",\n    \"price\": \"<double>\",\n    \"quantity\": \"<integer>\"\n  },\n  {\n    \"id\": \"<long>\",\n    \"name\": \"<string>\",\n    \"price\": \"<double>\",\n    \"quantity\": \"<integer>\"\n  }\n]",
+											"options": {
+												"raw": {
+													"headerFamily": "json",
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/api/carts/:id",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"carts",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "<long>",
+													"description": "(Required) "
+												}
+											]
+										},
+										"description": "Replace the list of products in a cart"
+									},
+									"response": [
+										{
+											"name": "OK",
+											"originalRequest": {
+												"method": "PUT",
+												"header": [
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"key": "Accept",
+														"value": "*/*"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "[\n  {\n    \"id\": \"<long>\",\n    \"name\": \"<string>\",\n    \"price\": \"<double>\",\n    \"quantity\": \"<integer>\"\n  },\n  {\n    \"id\": \"<long>\",\n    \"name\": \"<string>\",\n    \"price\": \"<double>\",\n    \"quantity\": \"<integer>\"\n  }\n]",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/api/carts/:id",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"carts",
+														":id"
+													],
+													"variable": [
+														{
+															"key": "id"
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "text",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "*/*"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"message\": \"<string>\",\n  \"success\": \"<boolean>\",\n  \"data\": {\n    \"userId\": \"<long>\",\n    \"items\": [\n      {\n        \"id\": \"<long>\",\n        \"name\": \"<string>\",\n        \"price\": \"<double>\",\n        \"quantity\": \"<integer>\"\n      },\n      {\n        \"id\": \"<long>\",\n        \"name\": \"<string>\",\n        \"price\": \"<double>\",\n        \"quantity\": \"<integer>\"\n      }\n    ],\n    \"cardtId\": \"<long>\",\n    \"totalPrice\": \"<double>\"\n  }\n}"
+										}
+									]
+								},
+								{
+									"name": "Delete a cart",
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "*/*"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/api/carts/:id",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"carts",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "<long>",
+													"description": "(Required) "
+												}
+											]
+										},
+										"description": "Removes a shopping cart by its ID"
+									},
+									"response": [
+										{
+											"name": "OK",
+											"originalRequest": {
+												"method": "DELETE",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "*/*"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/api/carts/:id",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"carts",
+														":id"
+													],
+													"variable": [
+														{
+															"key": "id"
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "text",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "*/*"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"message\": \"<string>\",\n  \"success\": \"<boolean>\",\n  \"data\": {}\n}"
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "user",
+							"item": [
+								{
+									"name": "{userId}",
+									"item": [
+										{
+											"name": "Get carts by user ID",
+											"request": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "*/*"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/api/carts/user/:userId",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"carts",
+														"user",
+														":userId"
+													],
+													"variable": [
+														{
+															"key": "userId",
+															"value": "<long>",
+															"description": "(Required) "
+														}
+													]
+												},
+												"description": "Retrieve all shopping carts for a specific user"
+											},
+											"response": [
+												{
+													"name": "OK",
+													"originalRequest": {
+														"method": "GET",
+														"header": [
+															{
+																"key": "Accept",
+																"value": "*/*"
+															}
+														],
+														"url": {
+															"raw": "{{baseUrl}}/api/carts/user/:userId",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"api",
+																"carts",
+																"user",
+																":userId"
+															],
+															"variable": [
+																{
+																	"key": "userId"
+																}
+															]
+														}
+													},
+													"status": "OK",
+													"code": 200,
+													"_postman_previewlanguage": "text",
+													"header": [
+														{
+															"key": "Content-Type",
+															"value": "*/*"
+														}
+													],
+													"cookie": [],
+													"body": "{\n  \"message\": \"<string>\",\n  \"success\": \"<boolean>\",\n  \"data\": [\n    {\n      \"userId\": \"<long>\",\n      \"items\": [\n        {\n          \"id\": \"<long>\",\n          \"name\": \"<string>\",\n          \"price\": \"<double>\",\n          \"quantity\": \"<integer>\"\n        },\n        {\n          \"id\": \"<long>\",\n          \"name\": \"<string>\",\n          \"price\": \"<double>\",\n          \"quantity\": \"<integer>\"\n        }\n      ],\n      \"cardtId\": \"<long>\",\n      \"totalPrice\": \"<double>\"\n    },\n    {\n      \"userId\": \"<long>\",\n      \"items\": [\n        {\n          \"id\": \"<long>\",\n          \"name\": \"<string>\",\n          \"price\": \"<double>\",\n          \"quantity\": \"<integer>\"\n        },\n        {\n          \"id\": \"<long>\",\n          \"name\": \"<string>\",\n          \"price\": \"<double>\",\n          \"quantity\": \"<integer>\"\n        }\n      ],\n      \"cardtId\": \"<long>\",\n      \"totalPrice\": \"<double>\"\n    }\n  ]\n}"
+												}
+											]
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "{cartId}",
+							"item": [
+								{
+									"name": "items",
+									"item": [
+										{
+											"name": "{itemId}",
+											"item": [
+												{
+													"name": "Remove an item from a cart",
+													"request": {
+														"method": "DELETE",
+														"header": [
+															{
+																"key": "Accept",
+																"value": "*/*"
+															}
+														],
+														"url": {
+															"raw": "{{baseUrl}}/api/carts/:cartId/items/:itemId",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"api",
+																"carts",
+																":cartId",
+																"items",
+																":itemId"
+															],
+															"variable": [
+																{
+																	"key": "cartId",
+																	"value": "<long>",
+																	"description": "(Required) "
+																},
+																{
+																	"key": "itemId",
+																	"value": "<long>",
+																	"description": "(Required) "
+																}
+															]
+														},
+														"description": "Deletes a specific item from the cart"
+													},
+													"response": [
+														{
+															"name": "OK",
+															"originalRequest": {
+																"method": "DELETE",
+																"header": [
+																	{
+																		"key": "Accept",
+																		"value": "*/*"
+																	}
+																],
+																"url": {
+																	"raw": "{{baseUrl}}/api/carts/:cartId/items/:itemId",
+																	"host": [
+																		"{{baseUrl}}"
+																	],
+																	"path": [
+																		"api",
+																		"carts",
+																		":cartId",
+																		"items",
+																		":itemId"
+																	],
+																	"variable": [
+																		{
+																			"key": "cartId"
+																		},
+																		{
+																			"key": "itemId"
+																		}
+																	]
+																}
+															},
+															"status": "OK",
+															"code": 200,
+															"_postman_previewlanguage": "text",
+															"header": [
+																{
+																	"key": "Content-Type",
+																	"value": "*/*"
+																}
+															],
+															"cookie": [],
+															"body": "{\n  \"message\": \"<string>\",\n  \"success\": \"<boolean>\",\n  \"data\": {\n    \"userId\": \"<long>\",\n    \"items\": [\n      {\n        \"id\": \"<long>\",\n        \"name\": \"<string>\",\n        \"price\": \"<double>\",\n        \"quantity\": \"<integer>\"\n      },\n      {\n        \"id\": \"<long>\",\n        \"name\": \"<string>\",\n        \"price\": \"<double>\",\n        \"quantity\": \"<integer>\"\n      }\n    ],\n    \"cardtId\": \"<long>\",\n    \"totalPrice\": \"<double>\"\n  }\n}"
+														}
+													]
+												}
+											]
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "Get all carts",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"url": "{{baseUrl}}/api/carts",
+								"description": "Retrieve a list of all shopping carts"
+							},
+							"response": [
+								{
+									"name": "OK",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "*/*"
+											}
+										],
+										"url": "{{baseUrl}}/api/carts"
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "*/*"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"message\": \"<string>\",\n  \"success\": \"<boolean>\",\n  \"data\": [\n    {\n      \"userId\": \"<long>\",\n      \"items\": [\n        {\n          \"id\": \"<long>\",\n          \"name\": \"<string>\",\n          \"price\": \"<double>\",\n          \"quantity\": \"<integer>\"\n        },\n        {\n          \"id\": \"<long>\",\n          \"name\": \"<string>\",\n          \"price\": \"<double>\",\n          \"quantity\": \"<integer>\"\n        }\n      ],\n      \"cardtId\": \"<long>\",\n      \"totalPrice\": \"<double>\"\n    },\n    {\n      \"userId\": \"<long>\",\n      \"items\": [\n        {\n          \"id\": \"<long>\",\n          \"name\": \"<string>\",\n          \"price\": \"<double>\",\n          \"quantity\": \"<integer>\"\n        },\n        {\n          \"id\": \"<long>\",\n          \"name\": \"<string>\",\n          \"price\": \"<double>\",\n          \"quantity\": \"<integer>\"\n        }\n      ],\n      \"cardtId\": \"<long>\",\n      \"totalPrice\": \"<double>\"\n    }\n  ]\n}"
+								}
+							]
+						},
+						{
+							"name": "Create a new cart",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/carts?userId=<long>",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"carts"
+									],
+									"query": [
+										{
+											"key": "userId",
+											"value": "<long>",
+											"description": "(Required) "
+										}
+									]
+								},
+								"description": "Creates an empty shopping cart for a user"
+							},
+							"response": [
+								{
+									"name": "OK",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "*/*"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/api/carts?userId=<long>",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"carts"
+											],
+											"query": [
+												{
+													"key": "userId",
+													"value": "<long>",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "*/*"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"message\": \"<string>\",\n  \"success\": \"<boolean>\",\n  \"data\": {\n    \"userId\": \"<long>\",\n    \"items\": [\n      {\n        \"id\": \"<long>\",\n        \"name\": \"<string>\",\n        \"price\": \"<double>\",\n        \"quantity\": \"<integer>\"\n      },\n      {\n        \"id\": \"<long>\",\n        \"name\": \"<string>\",\n        \"price\": \"<double>\",\n        \"quantity\": \"<integer>\"\n      }\n    ],\n    \"cardtId\": \"<long>\",\n    \"totalPrice\": \"<double>\"\n  }\n}"
+								}
+							]
+						}
+					]
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "id",
+			"value": "1"
+		},
+		{
+			"key": "base_url",
+			"value": "http://localhost:8080"
+		}
+	]
+}
