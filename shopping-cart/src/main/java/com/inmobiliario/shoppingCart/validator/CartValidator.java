@@ -30,12 +30,6 @@ public class CartValidator {
         if (item.getId() == null || item.getId() <= 0) {
             throw new ValidateServiceException("Item ID is required and must be greater than zero.");
         }
-        if (item.getName() == null || item.getName().isEmpty()) {
-            throw new ValidateServiceException("Item name is required.");
-        }
-        if (item.getPrice() <= 0) {
-            throw new ValidateServiceException("Item price must be greater than zero.");
-        }
         if (item.getQuantity() <= 0) {
             throw new ValidateServiceException("Item quantity must be greater than zero.");
         }

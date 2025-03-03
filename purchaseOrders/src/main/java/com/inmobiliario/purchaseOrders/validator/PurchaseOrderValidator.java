@@ -12,9 +12,6 @@ public class PurchaseOrderValidator {
         if (order.getCartId() == null || order.getCartId() <= 0) {
             throw new ValidateServiceException("Cart ID is required and must be greater than zero.");
         }
-        if (order.getTotalAmount() <= 0) {
-            throw new ValidateServiceException("Total amount must be greater than zero.");
-        }
        
     }
 

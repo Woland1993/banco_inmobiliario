@@ -4,6 +4,9 @@ import com.inmobiliario.shoppingCart.model.Cart;
 import com.inmobiliario.shoppingCart.model.Item;
 import com.inmobiliario.shoppingCart.repository.CartRepository;
 import com.inmobiliario.shoppingCart.validator.CartValidator;
+import com.inmobiliario.shoppingCart.client.ProductClient;
+import com.inmobiliario.shoppingCart.dto.ApiResponse;
+import com.inmobiliario.shoppingCart.dto.ProductDto;
 import com.inmobiliario.shoppingCart.exceptions.*;
 
 import org.springframework.stereotype.Service;
@@ -15,9 +18,10 @@ import java.util.Optional;
 public class CartService {
 
     private final CartRepository cartRepository;
-
-    public CartService(CartRepository cartRepository) {
+    private final ProductClient productClient;
+    public CartService(CartRepository cartRepository,ProductClient productClient) {
         this.cartRepository = cartRepository;
+        this.productClient=productClient;
     }
 
     public List<Cart> getAllCarts() {
@@ -69,14 +73,16 @@ public class CartService {
             throw new GenerateServiceException("Invalid user ID.");
         }
     }
-
+   
     public Optional<Cart> addItemToCart(Long cartId, Item item) {
         CartValidator.validateItem(item);
         CartValidator.validateId(cartId);
-    
+        if (!ProductExists(cartId)) {
+            throw new GenerateServiceException("Product does not exist");
+        }   
         try {
+            productToItem(item,productClient.getProductsById(item.getId()).getData());
             Optional<Cart> cart = cartRepository.findById(cartId);
-    
             cart.ifPresentOrElse(
                 c -> {
                     boolean itemExists = c.getItems().stream()
@@ -93,9 +99,10 @@ public class CartService {
     
             return cart;
         } catch (Exception e) {
-            throw new GenerateServiceException("Cart with ID " + cartId + " not found or Item with ID "+ item.getId() + " already exists in the cart.");
+            throw new GenerateServiceException("Error adding item to cart with ID " + cartId);
         }
     }
+    
 
     public Optional<Cart> updateCart(Long cartId, List<Item> items) {
         CartValidator.validateItems(items);
@@ -131,4 +138,20 @@ public class CartService {
             throw new GenerateServiceException("Cart with ID  " + cartId + " or item ID"+itemId+" not found for deletion.");
         }
     }
+
+    private boolean ProductExists(Long cartId) {
+        try {
+            ApiResponse<ProductDto> product = productClient.getProductsById(cartId);
+            return product != null;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    private void productToItem(Item item,ProductDto product){
+        item.setId(product.getId());
+        item.setName(product.getTitle());
+        item.setPrice(product.getPrice());
+    }
 }
+

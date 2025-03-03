@@ -1,5 +1,6 @@
 package com.inmobiliario.purchaseOrders.repository;
 
+import com.inmobiliario.purchaseOrders.dto.Cart;
 import com.inmobiliario.purchaseOrders.exceptions.*;
 import com.inmobiliario.purchaseOrders.model.PurchaseOrder;
 
@@ -16,7 +17,7 @@ public class PurchaseOrderRepository {
     private final List<PurchaseOrder> orders = new ArrayList<>();
     private long currentId = 1;
 
-    public PurchaseOrder save(PurchaseOrder order) {
+    public PurchaseOrder save(PurchaseOrder order,Cart cart) {
         try {
             boolean exists = orders.stream()
                     .anyMatch(existingOrder -> existingOrder.getCartId().equals(order.getCartId()));
@@ -28,6 +29,8 @@ public class PurchaseOrderRepository {
             order.setId(currentId++);
             order.setCreatedAt(LocalDateTime.now());
             order.setUpdatedAt(null);
+            order.setPaymentId(null);
+            order.setTotalAmount(cart.getTotalPrice());
             orders.add(order);
             return order;
         } catch (Exception e) {

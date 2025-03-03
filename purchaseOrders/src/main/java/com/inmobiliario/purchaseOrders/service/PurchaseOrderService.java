@@ -24,7 +24,10 @@ public class PurchaseOrderService {
 
     public PurchaseOrder createOrder(PurchaseOrder order) {
         PurchaseOrderValidator.validateCreate(order);
-        if(cartExists(order.getCartId())){return repository.save(order);}else{
+        if(cartExists(order.getCartId())){
+            ApiResponse<Cart> cart = cartClient.getCartById(order.getCartId());
+            return repository.save(order,cart.getData());
+        }else{
             throw new GenerateServiceException("Cart no exist");
         }
         
@@ -68,5 +71,5 @@ public class PurchaseOrderService {
         } catch (Exception e) {
             return false;
         }
-}
+    }
 }
