@@ -15,7 +15,6 @@ public class PaymentRepository {
     private final List<Payment> payments = new ArrayList<>();
 
     public List<Payment> findAll() {
-        int a=1;
         try {
             if (payments.isEmpty()) {
                 throw new NoDataFoundException("No payments found.");

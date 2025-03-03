@@ -3,7 +3,7 @@ package com.inmobiliario.purchaseOrders.service;
 import com.inmobiliario.purchaseOrders.model.PurchaseOrder;
 import com.inmobiliario.purchaseOrders.repository.PurchaseOrderRepository;
 import org.springframework.stereotype.Service;
-
+import com.inmobiliario.purchaseOrders.validator.PurchaseOrderValidator;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,7 +11,9 @@ import java.util.Optional;
 public class PurchaseOrderService {
     private final PurchaseOrderRepository repository = new PurchaseOrderRepository();
 
+
     public PurchaseOrder createOrder(PurchaseOrder order) {
+        PurchaseOrderValidator.validateCreate(order);
         return repository.save(order);
     }
 
@@ -20,6 +22,7 @@ public class PurchaseOrderService {
     }
 
     public Optional<PurchaseOrder> getOrderById(Long id) {
+        PurchaseOrderValidator.validateId(id);
         return repository.findById(id);
     }
 
@@ -28,6 +31,7 @@ public class PurchaseOrderService {
     }
 
     public List<PurchaseOrder> getOrdersByCartId(Long cartId) {
+        
         return repository.findByCartId(cartId);
     }
 
@@ -36,6 +40,7 @@ public class PurchaseOrderService {
     }
 
     public PurchaseOrder updateOrder(Long id, PurchaseOrder order) {
+        PurchaseOrderValidator.validateUpdate(id, order);
         return repository.update(id, order);
     }
 
